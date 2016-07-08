@@ -28,9 +28,9 @@ func NewTemplatedHelpFunc(tpl string) HelpFunc {
 }
 
 const (
-	_DEFAULT_HELP = "\xffUsage: {{.Name}} [global options] {{with .Verbs}}<verb> [verb options]{{end}}\n" +
+	_DEFAULT_HELP = "\xffUsage: {{.Name}} [options] {{with .Verbs}}<verb> [verb options]{{end}}\n" +
 		"\n" +
-		"Global options:\xff" +
+		"Options:\xff" +
 		"{{range .Flags}}" +
 		"\n\t" +
 		"\t{{with .Short}}" + "-{{.}}," + "{{end}}" +

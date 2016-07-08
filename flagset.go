@@ -222,13 +222,11 @@ func (fs *FlagSet) PrintHelp(w io.Writer) {
 func (fs *FlagSet) ParseAndFail(w io.Writer, args []string) {
 	err := fs.Parse(args)
 	if err != nil {
-		errCode := 0
 		if err != ErrHelpRequest {
-			errCode = 1
 			fmt.Fprintf(w, "Error: %s\n", err)
 		}
 		fs.PrintHelp(w)
-		os.Exit(errCode)
+		os.Exit(0)
 	}
 }
 
