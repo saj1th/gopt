@@ -1,4 +1,4 @@
-package goptions
+package gopt
 
 // Help Defines the common help flag. It is handled separately as it will cause
 // Parse() to return ErrHelpRequest.

@@ -1,4 +1,4 @@
-package goptions
+package gopt
 
 import (
 	"fmt"
@@ -10,12 +10,12 @@ func TestParse_StringValue(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Name string `goptions:"--name, -n"`
+		Name string `gopt:"--name, -n"`
 	}
 	expected := "SomeName"
 
 	args = []string{"--name", "SomeName"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Flag parsing failed: %s", err)
@@ -27,7 +27,7 @@ func TestParse_StringValue(t *testing.T) {
 	options.Name = ""
 
 	args = []string{"-n", "SomeName"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Flag parsing failed: %s", err)
@@ -42,17 +42,17 @@ func TestParse_ObligatoryStringValue(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Name string `goptions:"-n, obligatory"`
+		Name string `gopt:"-n, obligatory"`
 	}
 	args = []string{}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err == nil {
 		t.Fatalf("Parsing should have failed.")
 	}
 
 	args = []string{"-n", "SomeName"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -69,10 +69,10 @@ func TestParse_UnknownFlag(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Name string `goptions:"--name, -n"`
+		Name string `gopt:"--name, -n"`
 	}
 	args = []string{"-k", "4"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err == nil {
 		t.Fatalf("Parsing should have failed.")
@@ -84,14 +84,14 @@ func TestParse_FlagCluster(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Fast    bool `goptions:"-f"`
-		Silent  bool `goptions:"-q"`
-		Serious bool `goptions:"-s"`
-		Crazy   bool `goptions:"-c"`
-		Verbose bool `goptions:"-v"`
+		Fast    bool `gopt:"-f"`
+		Silent  bool `gopt:"-q"`
+		Serious bool `gopt:"-s"`
+		Crazy   bool `gopt:"-c"`
+		Verbose bool `gopt:"-v"`
 	}
 	args = []string{"-fqcv"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -111,11 +111,11 @@ func TestParse_MutexGroup(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Create bool `goptions:"--create, mutexgroup='action'"`
-		Delete bool `goptions:"--delete, mutexgroup='action'"`
+		Create bool `gopt:"--create, mutexgroup='action'"`
+		Delete bool `gopt:"--delete, mutexgroup='action'"`
 	}
 	args = []string{"--create", "--delete"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err == nil {
 		t.Fatalf("Parsing should have failed.")
@@ -127,18 +127,18 @@ func TestParse_HelpFlag(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Name string `goptions:"--name, -n"`
-		Help `goptions:"--help, -h"`
+		Name string `gopt:"--name, -n"`
+		Help `gopt:"--help, -h"`
 	}
 	args = []string{"-n", "SomeNone", "-h"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != ErrHelpRequest {
 		t.Fatalf("Expected ErrHelpRequest, got: %s", err)
 	}
 
 	args = []string{"-n", "SomeNone"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Unexpected error returned: %s", err)
@@ -150,16 +150,16 @@ func TestParse_Verbs(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Server string `goptions:"--server, -s"`
+		Server string `gopt:"--server, -s"`
 
 		Verbs
 		Create struct {
-			Name string `goptions:"--name, -n"`
-		} `goptions:"create"`
+			Name string `gopt:"--name, -n"`
+		} `gopt:"create"`
 	}
 
 	args = []string{"-s", "127.0.0.1", "create", "-n", "SomeDocument"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -177,11 +177,11 @@ func TestParse_IntValue(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Limit int `goptions:"-l"`
+		Limit int `gopt:"-l"`
 	}
 
 	args = []string{"-l", "123"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -197,12 +197,12 @@ func TestParse_Remainder(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Limit int `goptions:"-l"`
+		Limit int `gopt:"-l"`
 		Remainder
 	}
 
 	args = []string{"-l", "123", "Something", "SomethingElse"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -220,18 +220,18 @@ func TestParse_VerbRemainder(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Limit int `goptions:"-l"`
+		Limit int `gopt:"-l"`
 		Remainder
 
 		Verbs
 		Create struct {
-			Fast bool `goptions:"-f"`
+			Fast bool `gopt:"-f"`
 			Remainder
-		} `goptions:"create"`
+		} `gopt:"create"`
 	}
 
 	args = []string{"create", "-f", "Something", "SomethingElse"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -250,11 +250,11 @@ func TestParse_NoRemainder(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Fast bool `goptions:"-f"`
+		Fast bool `gopt:"-f"`
 	}
 
 	args = []string{"-f", "Something", "SomethingElse"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err == nil {
 		t.Fatalf("Parsing should have failed")
@@ -266,18 +266,18 @@ func TestParse_MissingValue(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Name string `goptions:"-n, --name"`
+		Name string `gopt:"-n, --name"`
 	}
 
 	args = []string{"-n"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err == nil {
 		t.Fatalf("Parsing should have failed")
 	}
 
 	args = []string{"--name"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err == nil {
 		t.Fatalf("Parsing should have failed")
@@ -289,26 +289,26 @@ func TestParse_ObligatoryMutexGroup(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Create bool `goptions:"-c, mutexgroup='action', obligatory"`
-		Delete bool `goptions:"-d, mutexgroup='action'"`
+		Create bool `gopt:"-c, mutexgroup='action', obligatory"`
+		Delete bool `gopt:"-d, mutexgroup='action'"`
 	}
 
 	args = []string{}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err == nil {
 		t.Fatalf("Parsing should have failed")
 	}
 
 	args = []string{"-c", "-d"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err == nil {
 		t.Fatalf("Parsing should have failed")
 	}
 
 	args = []string{"-d"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -320,14 +320,14 @@ func TestParse_StringArray_Short(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Servers []string `goptions:"-s"`
+		Servers []string `gopt:"-s"`
 	}
 
 	args = []string{}
 	for i := 1; i < 10; i++ {
 		options.Servers = []string{}
 		args = append(args, []string{"-s", fmt.Sprintf("server%d", i)}...)
-		fs = NewFlagSet("goptions", &options)
+		fs = NewFlagSet("gopt", &options)
 		err = fs.Parse(args)
 		if err != nil {
 			t.Fatalf("Parsing failed at %d: %s", i, err)
@@ -348,13 +348,13 @@ func TestParse_BoolArray_Cluster(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Verbosity []bool `goptions:"-v"`
+		Verbosity []bool `gopt:"-v"`
 	}
 
 	args := "-v"
 	for i := 1; i < 10; i++ {
 		options.Verbosity = []bool{}
-		fs = NewFlagSet("goptions", &options)
+		fs = NewFlagSet("gopt", &options)
 		err = fs.Parse([]string{args})
 		if err != nil {
 			t.Fatalf("Parsing failed at %d: %s", i, err)
@@ -371,14 +371,14 @@ func TestParse_BoolArray_Short(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Verbosity []bool `goptions:"-v"`
+		Verbosity []bool `gopt:"-v"`
 	}
 
 	args = []string{}
 	for i := 1; i < 10; i++ {
 		options.Verbosity = []bool{}
 		args = append(args, "-v")
-		fs = NewFlagSet("goptions", &options)
+		fs = NewFlagSet("gopt", &options)
 		err = fs.Parse(args)
 		if err != nil {
 			t.Fatalf("Parsing failed at %d: %s", i, err)
@@ -394,14 +394,14 @@ func TestParse_BoolArray_Long(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Verbosity []bool `goptions:"--verbose"`
+		Verbosity []bool `gopt:"--verbose"`
 	}
 
 	args = []string{}
 	for i := 1; i < 10; i++ {
 		options.Verbosity = []bool{}
 		args = append(args, "--verbose")
-		fs = NewFlagSet("goptions", &options)
+		fs = NewFlagSet("gopt", &options)
 		err = fs.Parse(args)
 		if err != nil {
 			t.Fatalf("Parsing failed at %d: %s", i, err)
@@ -416,12 +416,12 @@ func TestParse_UnexportedVerbs(t *testing.T) {
 	var options struct {
 		Verbs
 		A struct {
-			A1 string `goptions:"--a1"`
-			a2 string `goptions:"--a2"`
-		} `goptions:"A"`
+			A1 string `gopt:"--a1"`
+			a2 string `gopt:"--a2"`
+		} `gopt:"A"`
 	}
 	args := []string{"A", "--a1", "x"}
-	fs := NewFlagSet("goptions", &options)
+	fs := NewFlagSet("gopt", &options)
 	err := fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -433,11 +433,11 @@ func TestParse_UnexportedVerbs(t *testing.T) {
 
 func TestParse_DashAsRemainder(t *testing.T) {
 	var options struct {
-		SomeFlag bool `goptions:"-b"`
+		SomeFlag bool `gopt:"-b"`
 		Remainder
 	}
 	args := []string{"-b", "-"}
-	fs := NewFlagSet("goptions", &options)
+	fs := NewFlagSet("gopt", &options)
 	err := fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)

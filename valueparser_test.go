@@ -1,4 +1,4 @@
-package goptions
+package gopt
 
 import (
 	"net"
@@ -13,11 +13,11 @@ func TestParse_File(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Output *os.File `goptions:"-o, create, trunc, wronly"`
+		Output *os.File `gopt:"-o, create, trunc, wronly"`
 	}
 
 	args = []string{"-o", "testfile"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -34,11 +34,11 @@ func TestParse_TCPAddr(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Server *net.TCPAddr `goptions:"-a"`
+		Server *net.TCPAddr `gopt:"-a"`
 	}
 
 	args = []string{"-a", "192.168.0.100:8080"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -54,11 +54,11 @@ func TestParse_URL(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Server *url.URL `goptions:"-a"`
+		Server *url.URL `gopt:"-a"`
 	}
 
 	args = []string{"-a", "http://www.google.com"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -74,11 +74,11 @@ func TestParse_Duration(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Cache time.Duration `goptions:"-d"`
+		Cache time.Duration `gopt:"-d"`
 	}
 
 	args = []string{"-d", "1h45m"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)

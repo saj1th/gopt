@@ -1,14 +1,14 @@
 /*
-package goptions implements a flexible parser for command line options.
+package gopt implements a flexible parser for command line options.
 
 Key targets were the support for both long and short flag versions, mutually
 exclusive flags, and verbs. Flags and their corresponding variables are defined
 by the tags in a (possibly anonymous) struct.
 
     var options struct {
-    	Name string `goptions:"-n, --name"`
-    	Force bool `goptions:"-f, --force"`
-    	Verbosity int `goptions:"-v, --verbose"`
+    	Name string `gopt:"-n, --name"`
+    	Force bool `gopt:"-f, --force"`
+    	Verbosity int `gopt:"-v, --verbose"`
     }
 
 Short flags can be combined (e.g. `-nfv`). Long flags take their value after a
@@ -16,7 +16,7 @@ separating space. The equals notation (`--long-flag=value`) is NOT supported
 right now.
 
 Every member of the struct which is supposed to catch a command line value
-has to have a "goptions" tag. The contains the short and long flag names for this
+has to have a "gopt" tag. The contains the short and long flag names for this
 member but can additionally specify any of these options below.
 
     obligatory        - Flag must be specified. Otherwise an error will be returned
@@ -54,14 +54,14 @@ If a member is a slice type, multiple definitions of the flags are possible. For
 specification the underlying type will be used.
 
     var options struct {
-        Servers []string `goptions:"-s, --server, description='Servers to connect to'"`
+        Servers []string `gopt:"-s, --server, description='Servers to connect to'"`
     }{}
 
-goptions also has support for verbs. Each verb accepts its own set of flags which
+gopt also has support for verbs. Each verb accepts its own set of flags which
 take exactly the same tag format as global options. For an usage example of verbs
 see the PrintHelp() example.
 */
-package goptions
+package gopt
 
 import (
 	"os"

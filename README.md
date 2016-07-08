@@ -1,10 +1,4 @@
-`goptions` implements a flexible parser for command line options.
-
-Key targets were the support for both long and short flag versions, mutually
-exclusive flags, and verbs. Flags and their corresponding variables are defined
-by the tags in a (possibly anonymous) struct.
-
-![](https://circleci.com/gh/voxelbrain/goptions.png?circle-token=27cd98362d475cfa8c586565b659b2204733f25c)
+`gopt`  is a fork of https://github.com/voxelbrain/goptions
 
 # Example
 
@@ -12,31 +6,31 @@ by the tags in a (possibly anonymous) struct.
 package main
 
 import (
-	"github.com/voxelbrain/goptions"
+	"github.com/saj1th/gopt"
 	"os"
 	"time"
 )
 
 func main() {
 	options := struct {
-		Servers  []string      `goptions:"-s, --server, obligatory, description='Servers to connect to'"`
-		Password string        `goptions:"-p, --password, description='Don\\'t prompt for password'"`
-		Timeout  time.Duration `goptions:"-t, --timeout, description='Connection timeout in seconds'"`
-		Help     goptions.Help `goptions:"-h, --help, description='Show this help'"`
+		Servers  []string      `gopt:"-s, --server, obligatory, description='Servers to connect to'"`
+		Password string        `gopt:"-p, --password, description='Don\\'t prompt for password'"`
+		Timeout  time.Duration `gopt:"-t, --timeout, description='Connection timeout in seconds'"`
+		Help     gopt.Help `gopt:"-h, --help, description='Show this help'"`
 
-		goptions.Verbs
+		gopt.Verbs
 		Execute struct {
-			Command string   `goptions:"--command, mutexgroup='input', description='Command to exectute', obligatory"`
-			Script  *os.File `goptions:"--script, mutexgroup='input', description='Script to exectute', rdonly"`
-		} `goptions:"execute"`
+			Command string   `gopt:"--command, mutexgroup='input', description='Command to exectute', obligatory"`
+			Script  *os.File `gopt:"--script, mutexgroup='input', description='Script to exectute', rdonly"`
+		} `gopt:"execute"`
 		Delete struct {
-			Path  string `goptions:"-n, --name, obligatory, description='Name of the entity to be deleted'"`
-			Force bool   `goptions:"-f, --force, description='Force removal'"`
-		} `goptions:"delete"`
+			Path  string `gopt:"-n, --name, obligatory, description='Name of the entity to be deleted'"`
+			Force bool   `gopt:"-f, --force, description='Force removal'"`
+		} `gopt:"delete"`
 	}{ // Default values goes here
 		Timeout: 10 * time.Second,
 	}
-	goptions.ParseAndFail(&options)
+	gopt.ParseAndFail(&options)
 }
 ```
 
@@ -61,12 +55,12 @@ Verbs:
 
 # Quick Reference
 
-## goptions
+## gopt
 
-Each field of your struct can be tagged with a `goptions`
+Each field of your struct can be tagged with a `gopt`
 
 ```go
-    FieldName type `goptions:"-S, --long, options..."`
+    FieldName type `gopt:"-S, --long, options..."`
 ```
 
 Where the short options (`-S`) are declared with a single dash and
@@ -102,7 +96,7 @@ After the short/long option names are one or more of the following:
 * int
 * int64
 * int32
-* goptions.Help
+* gopt.Help
 * *os.File
 * *net.TCPAddr
 * *url.URL

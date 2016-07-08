@@ -1,4 +1,4 @@
-package goptions
+package gopt
 
 import (
 	"fmt"
@@ -27,10 +27,10 @@ func TestMarshaler(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Name *Name `goptions:"--name"`
+		Name *Name `gopt:"--name"`
 	}
 	args = []string{"--name", "Alexander Surma"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)
@@ -49,10 +49,10 @@ func TestArrayOfMarshaler(t *testing.T) {
 	var err error
 	var fs *FlagSet
 	var options struct {
-		Names []*Name `goptions:"--name"`
+		Names []*Name `gopt:"--name"`
 	}
 	args = []string{"--name", "Alexander Surma", "--name", "Yo Mama"}
-	fs = NewFlagSet("goptions", &options)
+	fs = NewFlagSet("gopt", &options)
 	err = fs.Parse(args)
 	if err != nil {
 		t.Fatalf("Parsing failed: %s", err)

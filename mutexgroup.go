@@ -1,4 +1,4 @@
-package goptions
+package gopt
 
 // A MutexGroup holds a set of flags which are mutually exclusive and cannot
 // be specified at the same time.

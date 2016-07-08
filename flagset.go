@@ -1,4 +1,4 @@
-package goptions
+package gopt
 
 import (
 	"errors"
@@ -70,7 +70,7 @@ func newFlagset(name string, structValue reflect.Value, parent *FlagSet) *FlagSe
 		}
 
 		fieldValue := structValue.Field(i)
-		tag := structValue.Type().Field(i).Tag.Get("goptions")
+		tag := structValue.Type().Field(i).Tag.Get("gopt")
 		flag, err := parseStructField(fieldValue, tag)
 
 		if err != nil {
@@ -98,7 +98,7 @@ func newFlagset(name string, structValue reflect.Value, parent *FlagSet) *FlagSe
 			r.Verbs = make(map[string]*FlagSet)
 		})
 		fieldValue := structValue.Field(i)
-		tag := structValue.Type().Field(i).Tag.Get("goptions")
+		tag := structValue.Type().Field(i).Tag.Get("gopt")
 		r.Verbs[tag] = newFlagset(tag, fieldValue, r)
 	}
 	r.createMaps()
