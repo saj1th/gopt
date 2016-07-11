@@ -223,7 +223,7 @@ func (fs *FlagSet) ParseAndFail(w io.Writer, args []string) {
 	err := fs.Parse(args)
 	if err != nil {
 		if err != ErrHelpRequest {
-			fmt.Fprintf(w, "Error: %s\n", err)
+			fmt.Fprintf(w, "Error: %s\n\n", err)
 		}
 		fs.PrintHelp(w)
 		os.Exit(0)
